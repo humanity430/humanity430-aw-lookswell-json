@@ -5,6 +5,13 @@ const scoreLabels = {
   originality: "자기 언어화"
 };
 
+const scoreMaxValues = {
+  persona_quality: 10,
+  question_quality_stage2: 10,
+  question_quality_stage3: 10,
+  originality: 70
+};
+
 const rationaleLabels = {
   actual_level: "실제 수준",
   persona_quality: "역할 설정",
@@ -26,11 +33,39 @@ const $ = (selector) => document.querySelector(selector);
 const jsonInput = $("#jsonInput");
 const errorMessage = $("#errorMessage");
 const report = $("#report");
+const fileInput = $("#fileInput");
 
 $("#clearBtn").addEventListener("click", () => {
   jsonInput.value = "";
   errorMessage.textContent = "";
+  fileInput.value = "";
   report.classList.add("hidden");
+});
+
+$("#pasteBtn").addEventListener("click", async () => {
+  try {
+    const clipboardText = await navigator.clipboard.readText();
+    jsonInput.value = clipboardText;
+    errorMessage.textContent = "";
+  } catch (error) {
+    errorMessage.textContent = "브라우저에서 클립보드 접근을 허용한 뒤 다시 눌러 주세요.";
+  }
+});
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    jsonInput.value = String(reader.result || "");
+    errorMessage.textContent = "";
+    fileInput.value = "";
+  });
+  reader.addEventListener("error", () => {
+    errorMessage.textContent = "파일을 읽지 못했습니다. JSON 파일인지 확인해 주세요.";
+  });
+  reader.readAsText(file);
 });
 
 $("#renderBtn").addEventListener("click", () => {
@@ -65,11 +100,19 @@ function renderReport(data) {
 function renderScores(scores) {
   const scoreList = $("#scoreList");
   scoreList.innerHTML = "";
+  let total = 0;
+  let maxTotal = 0;
 
   Object.entries(scores).forEach(([key, value]) => {
-    const max = key === "originality" ? 100 : 10;
-    const percent = clamp((Number(value) / max) * 100, 0, 100);
-    const unit = key === "originality" ? "점" : ` / ${max}`;
+    const max = scoreMaxValues[key] || 10;
+    const numericValue = Number(value);
+    const percent = Number.isFinite(numericValue) ? clamp((numericValue / max) * 100, 0, 100) : 0;
+    const unit = ` / ${max}`;
+
+    if (Number.isFinite(numericValue)) {
+      total += numericValue;
+      maxTotal += max;
+    }
 
     const item = document.createElement("div");
     item.className = "score-item";
@@ -84,6 +127,14 @@ function renderScores(scores) {
     `;
     scoreList.appendChild(item);
   });
+
+  const totalItem = document.createElement("div");
+  totalItem.className = "total-score";
+  totalItem.innerHTML = `
+    <span>총점</span>
+    <strong>${maxTotal ? `${formatScore(total)} / ${maxTotal}` : "-"}</strong>
+  `;
+  scoreList.appendChild(totalItem);
 }
 
 function renderRationales(rationales) {
@@ -132,6 +183,10 @@ function formatGap(gap) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
+}
+
+function formatScore(value) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
 
 function escapeHtml(value) {
