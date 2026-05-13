@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 글쓰기 평가 결과</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">AI Writing Feedback Report</p>
+        <h1>글쓰기 평가 결과</h1>
+        <p class="hero-desc">
+          JSON 평가 데이터를 학생과 학부모가 읽기 쉬운 카드형 리포트로 보여줍니다.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button id="clearBtn" class="btn ghost">초기화</button>
+      </div>
+    </section>
+
+    <section class="input-panel">
+      <div class="panel-header">
+        <div>
+          <h2>JSON 입력</h2>
+          <p>아래에 평가 JSON을 붙여 넣고 변환 버튼을 누르세요.</p>
+        </div>
+        <button id="renderBtn" class="btn secondary">리포트로 변환</button>
+      </div>
+      <textarea id="jsonInput" spellcheck="false" placeholder="여기에 JSON 데이터를 붙여 넣으세요."></textarea>
+      <p id="errorMessage" class="error-message" aria-live="polite"></p>
+    </section>
+
+    <section id="report" class="report hidden" aria-live="polite">
+      <section class="summary-grid">
+        <article class="summary-card level-card">
+          <span class="card-label">배정 단계</span>
+          <strong id="assignedLevel">-</strong>
+          <p id="levelNote">-</p>
+        </article>
+
+        <article class="summary-card">
+          <span class="card-label">수준 차이</span>
+          <strong id="levelGap">-</strong>
+          <p>실제 수준과 배정 수준의 차이를 보여줍니다.</p>
+        </article>
+
+        <article class="summary-card">
+          <span class="card-label">판정 안정도</span>
+          <strong id="tiebreaker">-</strong>
+          <p>경계선 판정에 참고할 수 있는 보조 지표입니다.</p>
+        </article>
+
+        <article class="summary-card status-card">
+          <span class="card-label">처리 상태</span>
+          <strong id="status">-</strong>
+          <p id="errorStatus">-</p>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="card score-section">
+          <div class="section-title">
+            <h2>평가 점수</h2>
+            <p>항목별 점수를 시각적으로 확인할 수 있습니다.</p>
+          </div>
+          <div id="scoreList" class="score-list"></div>
+        </article>
+
+        <article class="card">
+          <div class="section-title">
+            <h2>교사용 판단 근거</h2>
+            <p>평가자가 어떤 기준으로 판단했는지 요약합니다.</p>
+          </div>
+          <div id="rationaleList" class="rationale-list"></div>
+        </article>
+      </section>
+
+      <section class="card feedback-card">
+        <div class="section-title">
+          <h2>학생 피드백</h2>
+          <p>학생에게 바로 보여줄 수 있는 자연스러운 한국어 피드백입니다.</p>
+        </div>
+        <div id="feedbackList" class="feedback-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
