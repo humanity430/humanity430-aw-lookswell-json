@@ -1,1 +1,5 @@
-# Humanity430-AW-LooksWell-JSON
+# JSON 글쓰기 평가 리포트 UI
+
+AI 글쓰기 평가 결과 JSON을 카드형 리포트로 변환해 보여주는 정적 웹페이지입니다.
+
+샘플 데이터와 예시 JSON은 포함하지 않습니다. `index.html`을 브라우저로 열고, 실제 평가 JSON을 직접 붙여 넣어 사용합니다.
