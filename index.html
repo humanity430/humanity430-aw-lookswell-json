@@ -28,9 +28,16 @@
           <h2>JSON 입력</h2>
           <p>아래에 평가 JSON을 붙여 넣고 변환 버튼을 누르세요.</p>
         </div>
-        <button id="renderBtn" class="btn secondary">리포트로 변환</button>
+        <div class="input-actions">
+          <label class="btn ghost file-btn" for="fileInput">파일 첨부</label>
+          <button id="pasteBtn" class="btn ghost" type="button">붙여넣기</button>
+          <input id="fileInput" class="visually-hidden" type="file" accept=".json,application/json" />
+        </div>
       </div>
       <textarea id="jsonInput" spellcheck="false" placeholder="여기에 JSON 데이터를 붙여 넣으세요."></textarea>
+      <div class="render-actions">
+        <button id="renderBtn" class="btn secondary">리포트로 변환</button>
+      </div>
       <p id="errorMessage" class="error-message" aria-live="polite"></p>
     </section>
 
